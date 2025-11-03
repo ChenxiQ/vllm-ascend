@@ -312,15 +312,15 @@ aclnnStatus aclnnGroupedMatmulSwigluQuantWeightNZTensorListGetWorkspaceSize(cons
     CHECK_COND((storgeShape.GetDimNum() == WEIGHT_NZ_DIM_LIMIT), 
               ACLNN_ERR_PARAM_INVALID,
               "aclnnGroupedMatmulSwigluQuantWeightNZTensorList, The dimnum of storageShape for second input (weight) \
-              must be 5. \n But StorageShape got %s , and dimNum is %lu.",
+              must be 4. \n But StorageShape got %s , and dimNum is %lu.",
               op::ToString(storgeShape).GetString(), storgeShape.GetDimNum());
     // weight的StorageFormat无条件视为NZ
     weightNZ->SetStorageFormat(op::Format::FORMAT_FRACTAL_NZ);
     if (viewShape.GetDimNum() == WEIGHT_NZ_DIM_LIMIT){
-      // 若weight的viewShape为5维则视为NZ
+      // 若weight的viewShape为4维则视为NZ
       weightNZ->SetViewFormat(op::Format::FORMAT_FRACTAL_NZ);
     } else if (viewShape.GetDimNum() == WEIGHT_ND_DIM_LIMIT){
-      // 若weight的viewShape为3维则视为ND
+      // 若weight的viewShape为2维则视为ND
       weightNZ->SetViewFormat(op::Format::FORMAT_ND);
     }
   }

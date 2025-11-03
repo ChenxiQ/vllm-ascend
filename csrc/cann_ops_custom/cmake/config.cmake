@@ -30,18 +30,6 @@ else()
 endif ()
 message(STATUS "ASCEND_CANN_PACKAGE_PATH=${ASCEND_CANN_PACKAGE_PATH}")
 
-# 获取 json 路径, 如未安装，自动下载json库
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
-find_package(json MODULE)
-if(NOT JSON_INCLUDE_DIR)
-    include(${CMAKE_SOURCE_DIR}/cmake/third_party/Fetchjson.cmake)
-    find_package(json MODULE)
-endif()
-if(NOT JSON_INCLUDE_DIR)
-    message(FATAL_ERROR "Can not find json package.")
-endif()
-message(STATUS "Use json from ${JSON_INCLUDE_DIR}")
-
 ########################################################################################################################
 # 公共配置
 ########################################################################################################################
