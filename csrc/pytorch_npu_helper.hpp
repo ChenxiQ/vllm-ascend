@@ -228,7 +228,7 @@ inline aclTensor *ConvertType(const at::Tensor &at_tensor)
         aclCreateTensor(at_tensor.sizes().data(), at_tensor.sizes().size(), acl_data_type, strides.data(),
                         0, format, at_tensor.sizes().data(), at_tensor.sizes().size(),
                         const_cast<void *>(at_tensor.storage().data()));
-    
+
     return acl_tensor;
 }
 

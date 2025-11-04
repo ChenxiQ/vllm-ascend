@@ -76,11 +76,6 @@ def process_groups(x: torch.Tensor, weight: torch.Tensor,
         quantOutput (torch.Tensor): 量化后的输出张量,形状为 (M, N // 2)。
         quantScaleOutput (torch.Tensor): 量化缩放因子,形状为 (M,)。
     """
-    print(f"x shape: {x.shape}")
-    print(f"weight shape: {weight.shape}")
-    print(f"perChannelScale shape: {perChannelScale.shape}")
-    print(f"perTokenScale shape: {perTokenScale.shape}")
-    print(f"groupList shape: {groupList.shape}")
     M, N = x.shape[0], weight.shape[2]  # 获取输入张量的形状
     quantOutput = torch.zeros(M, N // 2).to(torch.int8)  # 初始化量化输出张量
     quantScaleOutput = torch.zeros(M).to(torch.float32)  # 初始化量化缩放因子张量
@@ -114,6 +109,7 @@ def test_gmm_swiglu_quant_weight_nz_tensor_list():
 
     # weight (E, N, K) - int8
     weight = torch.randint(-128, 127, size=(E, K, N), dtype=torch.int8)
+    weight_nz = convert_nd_to_nz(weight).contiguous()
 
     # weight_scale (E, N) - float32
     weight_scale = torch.rand(E, N) * 0.9 + 0.1  # uniform(0.1, 1.0)
@@ -122,9 +118,8 @@ def test_gmm_swiglu_quant_weight_nz_tensor_list():
     weight_nz_npu = []
     weight_scale_npu = []
     for i in range(E):
-        weight_nz = convert_nd_to_nz(weight[i].clone()).npu()
-        weight_nz_npu.append(weight_nz)
-        weight_scale_npu.append(weight_scale[i].clone().npu())
+        weight_nz_npu.append(torch_npu.npu_format_cast(weight_nz[i].npu(), 29))
+        weight_scale_npu.append(weight_scale[i].npu())
 
     # x_scale (M,) - float32
     x_scale = torch.rand(M) * 0.9 + 0.1  # uniform(0.1, 1.0)
