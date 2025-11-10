@@ -188,7 +188,6 @@ static bool CheckDtypeValid(const aclTensor* x, const aclTensorList* weight, con
 
 static bool CheckFormat(const aclTensor* x, const aclTensorList* weight, const aclTensor* output)
 {
-  // 之前已经强制更改StorageFormat为NZ了，这里还有必要校验吗？
   bool isNZ = (*weight)[0]->GetStorageFormat() == op::Format::FORMAT_FRACTAL_NZ;
   if (!isNZ) {
     // fp16 in fp32 out that is split k template, not precision-advanced now
@@ -309,11 +308,6 @@ aclnnStatus aclnnGroupedMatmulSwigluQuantWeightNZTensorListGetWorkspaceSize(cons
     auto storgeShape = (*weight)[i]->GetStorageShape();
     auto viewShape = (*weight)[i]->GetViewShape();
     aclTensor* weightNZ = const_cast<aclTensor*>((*weight)[i]);
-    CHECK_COND((storgeShape.GetDimNum() == WEIGHT_NZ_DIM_LIMIT), 
-              ACLNN_ERR_PARAM_INVALID,
-              "aclnnGroupedMatmulSwigluQuantWeightNZTensorList, The dimnum of storageShape for second input (weight) \
-              must be 4. \n But StorageShape got %s , and dimNum is %lu.",
-              op::ToString(storgeShape).GetString(), storgeShape.GetDimNum());
     // weight的StorageFormat无条件视为NZ
     weightNZ->SetStorageFormat(op::Format::FORMAT_FRACTAL_NZ);
     if (viewShape.GetDimNum() == WEIGHT_NZ_DIM_LIMIT){

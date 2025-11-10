@@ -124,7 +124,7 @@ std::tuple<at::Tensor, at::Tensor, at::Tensor> grouped_matmul_swiglu_quant_weigh
     const c10::optional<at::Tensor> & offset)
 {
     auto x_size = x.sizes();
-    int n = weight[0].sizes()[0] * weight[0].sizes()[3];
+    int n = weight[0].sizes()[1];
     int m = x_size[0];
     int k = x_size[1];
 

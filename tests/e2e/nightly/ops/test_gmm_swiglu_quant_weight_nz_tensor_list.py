@@ -109,7 +109,6 @@ def test_gmm_swiglu_quant_weight_nz_tensor_list():
 
     # weight (E, N, K) - int8
     weight = torch.randint(-128, 127, size=(E, K, N), dtype=torch.int8)
-    weight_nz = convert_nd_to_nz(weight).contiguous()
 
     # weight_scale (E, N) - float32
     weight_scale = torch.rand(E, N) * 0.9 + 0.1  # uniform(0.1, 1.0)
@@ -118,7 +117,7 @@ def test_gmm_swiglu_quant_weight_nz_tensor_list():
     weight_nz_npu = []
     weight_scale_npu = []
     for i in range(E):
-        weight_nz_npu.append(torch_npu.npu_format_cast(weight_nz[i].npu(), 29))
+        weight_nz_npu.append(torch_npu.npu_format_cast(weight[i].npu(), 29))
         weight_scale_npu.append(weight_scale[i].npu())
 
     # x_scale (M,) - float32

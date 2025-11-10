@@ -522,6 +522,7 @@ at::Tensor sgmv_expand(at::Tensor &x, at::Tensor &weight, at::Tensor &lora_indic
     cmd.Run();
     return y_out;
 }
+
 std::tuple<at::Tensor, at::Tensor, at::Tensor> grouped_matmul_swiglu_quant_weight_nz_tensor_list(
     const at::Tensor & x,
     const at::TensorList & weight,
@@ -532,7 +533,7 @@ std::tuple<at::Tensor, at::Tensor, at::Tensor> grouped_matmul_swiglu_quant_weigh
     const c10::optional<at::Tensor> & offset)
 {
     auto x_size = x.sizes();
-    int n = weight[0].sizes()[0] * weight[0].sizes()[3];
+    int n = weight[0].sizes()[1];
     int m = x_size[0];
     int k = x_size[1];
 
